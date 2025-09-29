@@ -26,7 +26,7 @@ void displayAutonSelector() {
       vex::task::sleep(600);
       if (Controller.ButtonX.pressing()) {
         Controller.rumble("....");
-        break;a
+        break;
       }
     }
 

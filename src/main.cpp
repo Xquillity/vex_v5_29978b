@@ -85,6 +85,10 @@ void autonomous(void) {
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
+
+
+
+
 void usercontrol(void) {
 
   while (true) {
@@ -99,22 +103,64 @@ void usercontrol(void) {
     spinRightDT(rightPower * 0.75);
     
     // ========== INERTIAL SENSOR CALIBRATION ========== //
-         
-    
-    
-    // ========== INTAKE ROLLERS CONTROL ========== //
-    if (Controller.ButtonL2.pressing()) {// Spin  backwards, to outake up balls, and score low goals
-      Intake.spin(forward, 100, percent);// Spin  forward, to pick up balls, and score high goals
-    } else if (Controller.ButtonR2.pressing()) {
-      Intake.spin(reverse, 100, percent);
-    } else {
-      Intake.stop(hold);
+    // (Handled in pre_auton; no runtime calibration here.)
 
-    }
-  
+    // ========== INTAKE ROLLERS CONTROL ========== //
+
+    // (temporary hopper controller test removed)
     
-    // Loop delay
-    wait(20, msec);
+  // ========== INTAKE/SCORING CONTROLS (consolidated) ========== //
+  // Button mapping:
+  //  - L1: Score top  -> IB forward, IM forward, IT reverse, hopper reverse
+  //  - L2: Score mid  -> IB forward, IM reverse, IT stopped, hopper reverse
+  //  - R1: Reverse    -> IB reverse, IM reverse, IT reverse, hopper reverse
+  //  - R2: Hopper in  -> IB forward, IM reverse, IT reverse, hopper reverse
+
+
+  //sets up boolean variables for each button
+    bool l1 = Controller.ButtonL1.pressing();
+    bool l2 = Controller.ButtonL2.pressing();
+    bool r1 = Controller.ButtonR1.pressing();
+    bool r2 = Controller.ButtonR2.pressing();
+
+   
+    if (l1) {
+      // SCORE TOP
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
+      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
+      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);//
+      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+    } 
+ //SCORE MIDDLE   
+    else if (l2) {
+      
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IT.stop();
+      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+
+ //REVERSE / UNJAM     
+    } else if (r1) {
+      
+      IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+
+//HOPPER INTAKE
+    } else if (r2) {
+      // Hopper intake
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    } else {
+      // No intake buttons pressed
+      IB.stop();
+      IM.stop();
+      IT.stop();
+      hopper.stop();
+    }
   }
 }
 
@@ -125,7 +171,6 @@ void usercontrol(void) {
 int main() {
 
   pre_auton();
-
   Competition.autonomous(autonomous);
   Competition.drivercontrol(usercontrol);
 

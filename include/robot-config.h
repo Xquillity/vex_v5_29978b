@@ -11,10 +11,8 @@ extern vex::competition Competition;
 //TODO: group into drivetrain
 
 extern vex::motor LB;
-extern vex::motor LM;
 extern vex::motor LF;
 extern vex::motor RB;
-extern vex::motor RM;
 extern vex::motor RF;
 
 extern vex::motor_group LeftDrive;
@@ -24,7 +22,9 @@ extern vex::drivetrain Drivetrain;
 
 extern vex::motor IT;
 extern vex::motor IB;
-extern vex::motor_group Intake;
+extern vex::motor IM;
+extern vex::motor hopper;
+
 
 extern vex::inertial InertialSensor;
 
