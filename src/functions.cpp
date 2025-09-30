@@ -59,12 +59,12 @@ void turnForTime(double velocity, double time) {
 
 // ===== Intake / Scoring Helpers =====
 void pickupBalls(int duration_ms) {
-    // Run bottom and middle intake inward to collect balls
-    IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-    IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+    // Run intake into hopper: IB forward, hopper forward
+    IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
     if (duration_ms > 0) wait(duration_ms, msec);
     IB.stop();
-    IM.stop();
+    hopper.stop();
 }
 
 void scoreTop(int duration_ms, bool hopperForward) {
@@ -105,7 +105,7 @@ void reverseIntake(int duration_ms) {
     IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-    hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     if (duration_ms > 0) wait(duration_ms, msec);
     IB.stop();
     IM.stop();
@@ -114,10 +114,8 @@ void reverseIntake(int duration_ms) {
 }
 
 void hopperIntake(int duration_ms, bool hopperForward) {
-    // Move balls into hopper: bottom forward, middle reverse, top reverse, hopper reverse
+    // Move balls into hopper: IB forward, hopper forward (matching R2 usercontrol)
     IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-    IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-    IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     if (hopperForward) {
         hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
     } else {
@@ -125,8 +123,6 @@ void hopperIntake(int duration_ms, bool hopperForward) {
     }
     if (duration_ms > 0) wait(duration_ms, msec);
     IB.stop();
-    IM.stop();
-    IT.stop();
     hopper.stop();
 }
 

@@ -124,7 +124,7 @@ void usercontrol(void) {
     bool r2 = Controller.ButtonR2.pressing();
 
    
-    if (l1) {
+    if (r2) {
       // SCORE TOP
       IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
       IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
@@ -132,7 +132,7 @@ void usercontrol(void) {
       hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     } 
  //SCORE MIDDLE   
-    else if (l2) {
+    else if (r1) {
       
       IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
       IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
@@ -140,7 +140,7 @@ void usercontrol(void) {
       hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
 
  //REVERSE / UNJAM     
-    } else if (r1) {
+    } else if (l2) {
       
       IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
       IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
@@ -148,11 +148,11 @@ void usercontrol(void) {
       hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
 
 //HOPPER INTAKE
-    } else if (r2) {
+    } else if (l1) {
       // Hopper intake
       IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IM.stop();
+      IT.stop();
       hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
     } else {
       // No intake buttons pressed
