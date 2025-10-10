@@ -109,13 +109,12 @@ void usercontrol(void) {
 
     // (temporary hopper controller test removed)
     
-  // ========== INTAKE/SCORING CONTROLS (consolidated) ========== //
-  // Button mapping:
-  //  - L1: Score top  -> IB forward, IM forward, IT reverse, hopper reverse
-  //  - L2: Score mid  -> IB forward, IM reverse, IT stopped, hopper reverse
-  //  - R1: Reverse    -> IB reverse, IM reverse, IT reverse, hopper reverse
-  //  - R2: Hopper in  -> IB forward, IM reverse, IT reverse, hopper reverse
-
+  // ========== S-SHAPED INTAKE CONTROLS ========== //
+  // Button mapping for S-shaped intake (3 rollers only):
+  //  - R2: Score TOP    -> IB fwd (pick up), IM fwd (guide up), IT fwd (CLOCKWISE to top)
+  //  - R1: Score MIDDLE -> IB fwd (pick up), IM fwd (guide up), IT rev (COUNTERCLOCKWISE to middle)  
+  //  - L2: Reverse      -> All rollers reverse to unjam
+  //  - L1: Intake only  -> IB fwd (pick up), IM fwd (guide), IT stopped
 
   //sets up boolean variables for each button
     bool l1 = Controller.ButtonL1.pressing();
@@ -125,41 +124,33 @@ void usercontrol(void) {
 
    
     if (r2) {
-      // SCORE TOP
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
-      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);//clockwise
-      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);//
-      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      // SCORE TOP - IT clockwise directs balls to top goal
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up S-shape
+      IT.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // CLOCKWISE to direct to top
     } 
- //SCORE MIDDLE   
     else if (r1) {
-      
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      IT.stop();
-      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-
- //REVERSE / UNJAM     
-    } else if (l2) {
-      
+      // SCORE MIDDLE - IT counterclockwise directs balls to middle goal
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up S-shape  
+      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);  // COUNTERCLOCKWISE to direct to middle
+    } 
+    else if (l2) {  
+      // REVERSE / UNJAM - all rollers reverse
       IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
       IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
       IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      hopper.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-
-//HOPPER INTAKE
-    } else if (l1) {
-      // Hopper intake
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-      IM.stop();
-      IT.stop();
-      hopper.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    } 
+    else if (l1) {
+      // INTAKE ONLY - collect balls without directing them anywhere
+      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up
+      IT.stop();  // top roller off - balls stay in intake
     } else {
-      // No intake buttons pressed
+      // No intake buttons pressed - stop all rollers
       IB.stop();
       IM.stop();
       IT.stop();
-      hopper.stop();
     }
   }
 }
@@ -181,3 +172,6 @@ int main() {
     wait(100, msec);
   }
 }
+
+
+// jaydon is here
