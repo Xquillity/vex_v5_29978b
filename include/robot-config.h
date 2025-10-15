@@ -28,8 +28,9 @@ extern vex::motor hopper;
 
 extern vex::inertial InertialSensor;
 
-extern vex::digital_out DoubleActingPiston;
-extern vex::digital_out SingleActingPiston;
+extern vex::digital_out Pneumatic75mm;  // 75mm stroke cylinder
+extern vex::digital_out Pneumatic50mm;  // 50mm stroke cylinder  
+extern vex::digital_out Pneumatic25mm;  // 25mm stroke cylinder
 
 void vexcodeInit();
 

@@ -113,7 +113,53 @@ void reverseIntake(int duration_ms) {
     hopper.stop();
 }
 
-void hopperIntake(int duration_ms, bool hopperForward) {
+// ===== SIMPLE SCORING FUNCTIONS FOR S-SHAPED INTAKE =====
+
+void scoreTop(int duration_ms = 3000) {
+    // Score to top goal - IT spins clockwise (forward)
+    IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+    IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide up S-shape
+    IT.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // clockwise to top
+    if (duration_ms > 0) wait(duration_ms, msec);
+    IB.stop();
+    IM.stop();
+    IT.stop();
+}
+
+void scoreMid(int duration_ms = 3000) {
+    // Score to middle goal - IT spins counterclockwise (reverse)
+    IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+    IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide up S-shape
+    IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);  // counterclockwise to middle
+    if (duration_ms > 0) wait(duration_ms, msec);
+    IB.stop();
+    IM.stop();
+    IT.stop();
+}
+
+void scoreBottom(int duration_ms = 2000) {
+    // Score to bottom goal - just run intake forward, no top roller
+    IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up and push balls
+    IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // help push balls
+    IT.stop();  // top roller off - balls go to bottom
+    if (duration_ms > 0) wait(duration_ms, msec);
+    IB.stop();
+    IM.stop();
+    IT.stop();
+}
+
+void intakeOnly(int duration_ms = 2000) {
+    // Just collect balls without scoring
+    IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
+    IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide up
+    IT.stop();  // top roller off - balls stay in intake
+    if (duration_ms > 0) wait(duration_ms, msec);
+    IB.stop();
+    IM.stop();
+    IT.stop();
+}
+
+    void hopperIntake(int duration_ms, bool hopperForward) {
     // Move balls into hopper: IB forward, hopper forward (matching R2 usercontrol)
     IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
     if (hopperForward) {

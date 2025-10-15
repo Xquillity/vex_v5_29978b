@@ -30,22 +30,20 @@ vex::motor IT(vex::PORT5, vex::gearSetting::ratio6_1, false); //Top Intake Motor
 vex::motor IM(vex::PORT6, vex::gearSetting::ratio6_1, false); //Middle Intake Motor (port 6)
 vex::motor IB(vex::PORT7, vex::gearSetting::ratio6_1, false); //Bottom Intake Motor (port 7)
 vex::motor hopper(vex::PORT8, vex::gearSetting::ratio6_1, false); //Hopper Motor (port 8)
-a 
 
 
-
-
-
-vex::digital_out DoubleActingPiston(Brain.ThreeWirePort.A);
-vex::digital_out SingleActingPiston(Brain.ThreeWirePort.B);
+vex::digital_out Pneumatic75mm(Brain.ThreeWirePort.A);  // 75mm stroke cylinder
+vex::digital_out Pneumatic50mm(Brain.ThreeWirePort.B);  // 50mm stroke cylinder
+vex::digital_out Pneumatic25mm(Brain.ThreeWirePort.C);  // 25mm stroke cylinder
 
 // Inertial sensor (if connected). If your inertial is on a different port, change the port here.
 vex::inertial InertialSensor(vex::PORT7); // Inertial Sensor on port 7
 
 void vexcodeInit() {
   InertialSensor.calibrate();
-  DoubleActingPiston.set(false); // retracted
-  SingleActingPiston.set(false); // off
+  Pneumatic75mm.set(false); // retracted
+  Pneumatic50mm.set(false); // retracted
+  Pneumatic25mm.set(false); // retracted
   while (InertialSensor.isCalibrating()) {
     vex::task::sleep(100);
   }

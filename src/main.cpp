@@ -152,6 +152,28 @@ void usercontrol(void) {
       IM.stop();
       IT.stop();
     }
+
+    // ========== PNEUMATIC CONTROLS ========== //
+    // Simple pneumatic controls using directional pad:
+    // Up = 75mm cylinder, Down = 50mm cylinder, A = 25mm cylinder
+    
+    if (Controller.ButtonUp.pressing()) {
+      Pneumatic75mm.set(true);   // extend 75mm
+    } else {
+      Pneumatic75mm.set(false);  // retract 75mm
+    }
+    
+    if (Controller.ButtonDown.pressing()) {
+      Pneumatic50mm.set(true);   // extend 50mm
+    } else {
+      Pneumatic50mm.set(false);  // retract 50mm
+    }
+    
+    if (Controller.ButtonA.pressing()) {
+      Pneumatic25mm.set(true);   // extend 25mm
+    } else {
+      Pneumatic25mm.set(false);  // retract 25mm
+    }
   }
 }
 

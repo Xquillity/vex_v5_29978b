@@ -12,12 +12,9 @@ void spinLeftDT(double velocity);
 void spinDTPosition(double velocity, double targetInches);
 void turnForTime(double velocity, double time);
 
-// Intake / scoring helpers
-void pickupBalls(int duration_ms = 1000); // run IB forward + hopper forward to intake balls
-// hopperForward: true = spin hopper forward, false = spin hopper reverse
-void scoreTop(int duration_ms = 7000, bool hopperForward = true);    // run pattern to score to top
-void scoreMid(int duration_ms = 7000, bool hopperForward = true);    // run pattern to score to middle
-void reverseIntake(int duration_ms = 5000); // run all intake motors in reverse
-void hopperIntake(int duration_ms = 5000, bool hopperForward = true); // run IB forward + hopper to move balls into hopper
+// S-shaped intake scoring functions (simple)
+void scoreTop(int duration_ms = 3000);    // score to top goal (IT clockwise)
+void scoreMid(int duration_ms = 3000);    // score to middle goal (IT counterclockwise)  
+void intakeOnly(int duration_ms = 2000);  // collect balls without scoring
 
 #endif //end of define
