@@ -125,26 +125,26 @@ void usercontrol(void) {
    
     if (r2) {
       // SCORE TOP - IT clockwise directs balls to top goal
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up S-shape
-      IT.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // CLOCKWISE to direct to top
+      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // guide balls up S-shape
+      IT.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // CLOCKWISE to direct to top
     } 
     else if (r1) {
       // SCORE MIDDLE - IT counterclockwise directs balls to middle goal
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up S-shape  
-      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);  // COUNTERCLOCKWISE to direct to middle
-    } 
+      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 100, vex::velocityUnits::pct);  // guide balls up S-shape
+      IT.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);  // COUNTERCLOCKWISE to direct to middle
+    }  
     else if (l2) {  
       // REVERSE / UNJAM - all rollers reverse
-      IB.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      IM.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      IT.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      IB.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);
+      IM.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);
+      IT.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);
     } 
     else if (l1) {
       // INTAKE ONLY - collect balls without directing them anywhere
-      IB.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);  // guide balls up
+      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
+      IM.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // guide balls up
       IT.stop();  // top roller off - balls stay in intake
     } else {
       // No intake buttons pressed - stop all rollers

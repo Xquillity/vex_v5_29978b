@@ -19,9 +19,9 @@ void drivePID(double targetInches, double kP = 0.155, double kI = 0, double kD =
   double maxIntegral = 100;
 
 
-  while (fabs(error) > 5.0) { //Keep running until you’re within 1° of your target
-  double leftAvg = (LF.position(degrees) + LB.position(degrees)) / 2.0;
-  double rightAvg = (RF.position(degrees) + RB.position(degrees)) / 2.0;
+  while (fabs(error) > 5.0) { //Keep running until you're within 1° of your target
+  double leftAvg = (LF.position(degrees) + LM.position(degrees) + LB.position(degrees)) / 3.0;
+  double rightAvg = (RF.position(degrees) + RM.position(degrees) + RB.position(degrees)) / 3.0;
   double avgPos = (leftAvg + rightAvg) / 2.0;
 
     /*Controller.Screen.clearScreen();

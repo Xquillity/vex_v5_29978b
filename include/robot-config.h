@@ -14,6 +14,8 @@ extern vex::motor LB;
 extern vex::motor LF;
 extern vex::motor RB;
 extern vex::motor RF;
+extern vex::motor LM;
+extern vex::motor RM;
 
 extern vex::motor_group LeftDrive;
 extern vex::motor_group RightDrive;
