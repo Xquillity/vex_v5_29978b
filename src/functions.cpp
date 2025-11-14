@@ -53,9 +53,6 @@ void spinDTPosition(double Velocity, double targetInches) {
     RF.spinToPosition(targetDegrees, degrees, Velocity, rpm, false);   
     RM.spinToPosition(targetDegrees, degrees, Velocity, rpm, false);
     RB.spinToPosition(targetDegrees, degrees, Velocity, rpm, true);
-
-
-
 }
 
 void turnForTime(double velocity, double time) {
@@ -65,98 +62,90 @@ void turnForTime(double velocity, double time) {
     stopDT();
 }
 
-// ===== SIMPLE SCORING FUNCTIONS FOR S-SHAPED INTAKE =====
 
-void scoreTop(int intake_duration_ms = 3000, int speed_percent = 60) {
-    // Score to top goal - IT spins clockwise (forward)
-    // Parameter: intake_duration_ms = how long to run intake (default 3000ms = 3 seconds)
-    IB.spin(forward, speed_percent, percent);  // pick up balls
-    IM.spin(forward, speed_percent, percent);  // guide up S-shape
-    IT.spin(forward, speed_percent, percent);  // clockwise to top
-    if (intake_duration_ms > 0) wait(intake_duration_ms, msec);
-    IB.stop();
-    IM.stop();
-    IT.stop();
+
+
+// ===== RAMP INTAKE FUNCTIONS FOR AUTONOMOUS =====//
+
+void startPickupBalls(int speed) {
+    // Pickup balls only - run only bottom intake motor
+    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    TopIntake.stop();
 }
 
-void scoreMid(int intake_duration_ms = 3000, int speed_percent = 60) {
-    // Score to middle goal - IT spins counterclockwise (reverse)
-    // Parameter: intake_duration_ms = how long to run intake (default 3000ms = 3 seconds)
-    IB.spin(forward, speed_percent, percent);  // pick up balls
-    IM.spin(forward, speed_percent, percent);  // guide up S-shape
-    IT.spin(reverse, speed_percent, percent);  // counterclockwise to middle
-    if (intake_duration_ms > 0) wait(intake_duration_ms, msec);
-    IB.stop();
-    IM.stop();
-    IT.stop();
+void startScoreTop(int speed) {
+    // Score top - run everything forward
+    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    TopIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
 }
 
-void scoreBottom(int intake_duration_ms = 2000, int speed_percent = 60) {
-    // Score to bottom goal - just run intake forward, no top roller
-    // Parameter: intake_duration_ms = how long to run intake (default 2000ms = 2 seconds)
-    IB.spin(reverse, speed_percent, percent);  // pick up and push balls
-    IM.spin(forward, speed_percent, percent);  // help push balls
-    IT.spin(forward, speed_percent, percent);  // top roller off - balls go to bottom
-    if (intake_duration_ms > 0) wait(intake_duration_ms, msec);
-    IB.stop();
-    IM.stop();
-    IT.stop();
+void startScoreBottom(int speed) {
+    // Score bottom - reverse everything
+    BottomIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    TopIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
 }
 
-void intakeOnly(int intake_duration_ms = 2000, int speed_percent = 60) {
-    // Just collect balls without scoring
-    // Parameter: intake_duration_ms = how long to run intake (default 2000ms = 2 seconds)
-    IB.spin(forward, speed_percent, percent);  // pick up balls
-    IM.spin(forward, speed_percent, percent);  // guide up
-    IT.stop();  // top roller off - balls stay in intake
-    if (intake_duration_ms > 0) wait(intake_duration_ms, msec);
-    IB.stop();
-    IM.stop();
-    IT.stop();
+void stopIntake() {
+    // Stop both intake motors
+    BottomIntake.stop();
+    TopIntake.stop();
 }
 
-// ===== START/STOP SCORING FUNCTIONS (6 FUNCTIONS TOTAL) =====
+// ===== TIMED INTAKE FUNCTIONS FOR AUTONOMOUS =====
 
-void startScoreTop(int speed_percent = 60) {
-    // Start scoring to top goal - IT spins clockwise (forward)
-    IB.spin(forward, speed_percent, percent);  // pick up balls
-    IM.spin(forward, speed_percent, percent);  // guide up S-shape
-    IT.spin(forward, speed_percent, percent);  // clockwise to top
+void pickupBallsForTime(int speed, int time_ms) {
+    // Pickup balls for specified time and speed
+    startPickupBalls(speed);
+    wait(time_ms, msec);
+    stopIntake();
 }
 
-void stopScoreTop() {
-    // Stop scoring to top goal
-    IB.stop();
-    IM.stop();
-    IT.stop();
+void scoreTopForTime(int speed, int time_ms) {
+    // Score top for specified time and speed
+    startScoreTop(speed);
+    wait(time_ms, msec);
+    stopIntake();
 }
 
-void startScoreMiddle(int speed_percent = 60) {
-    // Start scoring to middle goal - IT spins counterclockwise (reverse)
-    IB.spin(forward, speed_percent, percent);  // pick up balls
-    IM.spin(forward, speed_percent, percent);  // guide up S-shape
-    IT.spin(reverse, speed_percent, percent);  // counterclockwise to middle
+void scoreBottomForTime(int speed, int time_ms) {
+    // Score bottom for specified time and speed
+    startScoreBottom(speed);
+    wait(time_ms, msec);
+    stopIntake();
 }
 
-void stopScoreMiddle() {
-    // Stop scoring to middle goal
-    IB.stop();
-    IM.stop();
-    IT.stop();
+// ===== MATCHLOADER FUNCTIONS =====
+
+void extendMatchloader() {
+    // Extend matchloader piston
+    Matchloader.set(true);
 }
 
-void startScoreBottom(int speed_percent = 60) {
-    // Start scoring to bottom goal - bottom and middle reverse, top forward
-    IB.spin(reverse, speed_percent, percent);  // bottom roller spins reverse
-    IM.spin(reverse, speed_percent, percent);  // middle roller spins reverse
-    IT.spin(forward, speed_percent, percent);  // top roller spins forward
+void retractMatchloader() {
+    // Retract matchloader piston
+    Matchloader.set(false);
 }
 
-void stopScoreBottom() {
-    // Stop scoring to bottom goal
-    IB.stop();
-    IM.stop();
-    IT.stop();
+void toggleMatchloader() {
+    // Toggle matchloader piston state
+    Matchloader.set(!Matchloader.value());
+}
+
+// ===== DESCORER FUNCTIONS =====
+
+void extendDescorer() {
+    // Extend descorer piston
+    Descorer.set(true);
+}
+
+void retractDescorer() {
+    // Retract descorer piston
+    Descorer.set(false);
+}
+
+void toggleDescorer() {
+    // Toggle descorer piston state
+    Descorer.set(!Descorer.value());
 }
 
     

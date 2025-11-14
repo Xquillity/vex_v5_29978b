@@ -12,18 +12,23 @@ void spinLeftDT(double velocity);
 void spinDTPosition(double velocity, double targetInches);
 void turnForTime(double velocity, double time);
 
-// S-shaped intake scoring functions (simple)
-void scoreTop(int duration_ms = 3000);    // score to top goal (IT clockwise)
-void scoreMid(int duration_ms = 3000);    // score to middle goal (IT counterclockwise)  
-void scoreBottom(int duration_ms = 2000); // score to bottom goal (IT off)
-void intakeOnly(int duration_ms = 2000);  // collect balls without scoring
+// Ramp intake functions for autonomous
+void startPickupBalls(int speed);            // pickup balls only (bottom motor forward, top stopped)
+void startScoreTop(int speed);               // score top (both motors forward)
+void startScoreBottom(int speed);            // score bottom (both motors reverse)
+void stopIntake();                           // stop both intake motors
 
-// Start/Stop scoring functions (no wait time)
-void startScoreTop(int speed_percent = 60);
-void stopScoreTop();
-void startScoreMiddle(int speed_percent = 60);
-void stopScoreMiddle();
-void startScoreBottom(int speed_percent = 60);
-void stopScoreBottom();
+// Timed intake functions for autonomous
+void pickupBallsForTime(int speed, int time_ms);     // pickup balls for specified time and speed
+void scoreTopForTime(int speed, int time_ms);        // score top for specified time and speed
+void scoreBottomForTime(int speed, int time_ms);     // score bottom for specified time and speed
+
+// Matchloader and Descorer functions
+void extendMatchloader();
+void retractMatchloader();
+void toggleMatchloader();
+void extendDescorer();
+void retractDescorer();
+void toggleDescorer();
 
 #endif //end of define

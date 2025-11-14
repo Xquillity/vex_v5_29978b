@@ -77,12 +77,12 @@ void autonomous(void) {
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
-/*                              User Control Task                            */
+/*                             DRIVER Control Task                           */
 /*                                                                           */
 /*  This task is used to control your robot during the user control phase of */
 /*  a VEX Competition.                                                       */
 /*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
+/*                                                                           */
 /*---------------------------------------------------------------------------*/
 
 
@@ -90,6 +90,9 @@ void autonomous(void) {
 
 
 void usercontrol(void) {
+  // Simple button state tracking
+  bool lastButtonX = false;
+  bool lastButtonY = false;
 
   while (true) {
     // ========== DRIVE CONTROL ========== //
@@ -105,16 +108,16 @@ void usercontrol(void) {
     // ========== INERTIAL SENSOR CALIBRATION ========== //
     // (Handled in pre_auton; no runtime calibration here.)
 
-    // ========== INTAKE ROLLERS CONTROL ========== //
-
-    // (temporary hopper controller test removed)
+   
+   
+   
+   // ========== INTAKE ROLLERS CONTROL ========== //
     
-  // ========== S-SHAPED INTAKE CONTROLS ========== //
-  // Button mapping for S-shaped intake (3 rollers only):
-  //  - R2: Score TOP    -> IB fwd (pick up), IM fwd (guide up), IT fwd (CLOCKWISE to top)
-  //  - R1: Score MIDDLE -> IB fwd (pick up), IM fwd (guide up), IT rev (COUNTERCLOCKWISE to middle)  
-  //  - L2: Reverse      -> All rollers reverse to unjam
-  //  - L1: Intake only  -> IB fwd (pick up), IM fwd (guide), IT stopped
+  // ========== RAMP INTAKE CONTROLS ========== //
+  // Button mapping for ramp intake:
+  //  - R1: PICKUP BALLS -> Only bottom intake motor forward
+  //  - R2: SCORE TOP    -> Both motors forward (everything forward)
+  //  - L1: SCORE BOTTOM -> Both motors reverse (everything reverse)
 
   //sets up boolean variables for each button
     bool l1 = Controller.ButtonL1.pressing();
@@ -123,64 +126,55 @@ void usercontrol(void) {
     bool r2 = Controller.ButtonR2.pressing();
 
    
-    if (r2) {
-      // SCORE TOP - IT clockwise directs balls to top goal
-      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // guide balls up S-shape
-      IT.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // CLOCKWISE to direct to top
+    if (r1) {
+      // PICKUP BALLS ONLY - only bottom intake motor forward
+      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      TopIntake.stop();
     } 
-    else if (r1) {
-      // SCORE MIDDLE - IT counterclockwise directs balls to middle goal
-      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 100, vex::velocityUnits::pct);  // guide balls up S-shape
-      IT.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);  // COUNTERCLOCKWISE to direct to middle
-    }  
-    else if (l2) {  
-      // REVERSE / UNJAM - all rollers reverse
-      IB.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);
-      IM.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);
-      IT.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);
-    } 
+    else if (r2) {
+      // SCORE TOP - both motors forward (everything forward)
+      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    }
     else if (l1) {
-      // INTAKE ONLY - collect balls without directing them anywhere
-      IB.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // pick up balls
-      IM.spin(vex::directionType::fwd, 120, vex::velocityUnits::pct);  // guide balls up
-      IT.stop();  // top roller off - balls stay in intake
-    } else {
-      // No intake buttons pressed - stop all rollers
-      IB.stop();
-      IM.stop();
-      IT.stop();
+      // SCORE BOTTOM - both motors reverse (everything reverse)
+      BottomIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     }
+    else {
+      // No intake buttons pressed - stop both motors
+      BottomIntake.stop();
+      TopIntake.stop();
+    }
+    
+   
+   
+    // ========== MATCHLOADER CONTROL ========== //
+    // X button - single press toggle
+    bool currentButtonX = Controller.ButtonX.pressing();
+    if (currentButtonX && !lastButtonX) {
+      toggleMatchloader();  // Simple toggle - if extended it retracts, if retracted it extends
+    }
+    lastButtonX = currentButtonX;
+   
+    
 
-    // ========== PNEUMATIC CONTROLS ========== //
-    // Simple pneumatic controls using directional pad:
-    // Up = 75mm cylinder, Down = 50mm cylinder, A = 25mm cylinder
-    
-    if (Controller.ButtonUp.pressing()) {
-      Pneumatic75mm.set(true);   // extend 75mm
-    } else {
-      Pneumatic75mm.set(false);  // retract 75mm
+    // ========== DESCORER CONTROL ========== //
+    // Y button - single press toggle
+    bool currentButtonY = Controller.ButtonY.pressing();
+    if (currentButtonY && !lastButtonY) {
+      toggleDescorer();  // Simple toggle - if extended it retracts, if retracted it extends
     }
-    
-    if (Controller.ButtonDown.pressing()) {
-      Pneumatic50mm.set(true);   // extend 50mm
-    } else {
-      Pneumatic50mm.set(false);  // retract 50mm
-    }
-    
-    if (Controller.ButtonA.pressing()) {
-      Pneumatic25mm.set(true);   // extend 25mm
-    } else {
-      Pneumatic25mm.set(false);  // retract 25mm
-    }
+    lastButtonY = currentButtonY;
   }
 }
 
+///----------------------------------END OF DRIVER CONTROL-----------------------------------------*/
 
-//
+
+
+
 // Main will set up the competition functions and callbacks.
-//
 int main() {
 
   pre_auton();
@@ -196,4 +190,3 @@ int main() {
 }
 
 
-// jaydon is here

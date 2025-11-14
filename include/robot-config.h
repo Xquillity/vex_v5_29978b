@@ -12,9 +12,9 @@ extern vex::competition Competition;
 
 extern vex::motor LB;
 extern vex::motor LF;
+extern vex::motor LM;
 extern vex::motor RB;
 extern vex::motor RF;
-extern vex::motor LM;
 extern vex::motor RM;
 
 extern vex::motor_group LeftDrive;
@@ -22,17 +22,14 @@ extern vex::motor_group RightDrive;
 
 extern vex::drivetrain Drivetrain;
 
-extern vex::motor IT;
-extern vex::motor IB;
-extern vex::motor IM;
-extern vex::motor hopper;
-
+extern vex::motor BottomIntake;
+extern vex::motor TopIntake;
 
 extern vex::inertial InertialSensor;
 
-extern vex::digital_out Pneumatic75mm;  // 75mm stroke cylinder
-extern vex::digital_out Pneumatic50mm;  // 50mm stroke cylinder  
-extern vex::digital_out Pneumatic25mm;  // 25mm stroke cylinder
+// Matchloader and Descorer pistons
+extern vex::digital_out Matchloader;    // Matchloader piston
+extern vex::digital_out Descorer;       // Descorer piston
 
 void vexcodeInit();
 
