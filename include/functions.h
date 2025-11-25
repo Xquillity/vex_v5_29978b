@@ -31,4 +31,9 @@ void extendDescorer();
 void retractDescorer();
 void toggleDescorer();
 
+// Middle scoring functions
+void startScoreMiddle(int speed);
+void stopScoreMiddle();
+void scoreMiddleForTime(int speed, int time_ms);
+
 #endif //end of define

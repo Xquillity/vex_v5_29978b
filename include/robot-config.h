@@ -27,9 +27,10 @@ extern vex::motor TopIntake;
 
 extern vex::inertial InertialSensor;
 
-// Matchloader and Descorer pistons
+// Matchloader, Descorer, and Middle pistons
 extern vex::digital_out Matchloader;    // Matchloader piston
 extern vex::digital_out Descorer;       // Descorer piston
+extern vex::digital_out Middle;          // Middle scoring piston
 
 void vexcodeInit();
 

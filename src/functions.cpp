@@ -148,4 +148,27 @@ void toggleDescorer() {
     Descorer.set(!Descorer.value());
 }
 
+// ===== MIDDLE SCORING FUNCTIONS =====
+
+void startScoreMiddle(int speed) {
+    // Start middle scoring - extend piston and spin motors forward (same as top scoring)
+    Middle.set(true);
+    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    TopIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+}
+
+void stopScoreMiddle() {
+    // Stop middle scoring - retract piston and stop motors
+    Middle.set(false);
+    BottomIntake.stop();
+    TopIntake.stop();
+}
+
+void scoreMiddleForTime(int speed, int time_ms) {
+    // Score middle for specified time and speed
+    startScoreMiddle(speed);
+    wait(time_ms, msec);
+    stopScoreMiddle();
+}
+
     

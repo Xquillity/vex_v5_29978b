@@ -45,6 +45,7 @@ vex::motor TopIntake(vex::PORT8, vex::gearSetting::ratio18_1, false); //Top Inta
 
 vex::digital_out Matchloader(Brain.ThreeWirePort.D);    // Matchloader piston
 vex::digital_out Descorer(Brain.ThreeWirePort.E);       // Descorer piston
+vex::digital_out Middle(Brain.ThreeWirePort.F);         // Middle scoring piston
 
 
 
@@ -60,6 +61,7 @@ void vexcodeInit() {
   InertialSensor.calibrate();
   Matchloader.set(false); // retracted
   Descorer.set(false); // retracted
+  Middle.set(false); // retracted
   while (InertialSensor.isCalibrating()) {
     vex::task::sleep(100);
   }

@@ -95,6 +95,7 @@ void usercontrol(void) {
   bool lastButtonY = false;
 
   while (true) {
+    
     // ========== DRIVE CONTROL ========== //
     double fwd = Controller.Axis3.position();
     double turn = Controller.Axis1.position() * 0.67; // Scale down turn to make it more manageable
@@ -102,8 +103,8 @@ void usercontrol(void) {
     double leftPower  = fwd + turn;
     double rightPower = fwd - turn;
 
-    spinLeftDT(leftPower * 0.75);
-    spinRightDT(rightPower * 0.75);
+    spinLeftDT(leftPower * 0.9);
+    spinRightDT(rightPower * 0.9);
     
     // ========== INERTIAL SENSOR CALIBRATION ========== //
     // (Handled in pre_auton; no runtime calibration here.)
@@ -115,9 +116,13 @@ void usercontrol(void) {
     
   // ========== RAMP INTAKE CONTROLS ========== //
   // Button mapping for ramp intake:
-  //  - R1: PICKUP BALLS -> Only bottom intake motor forward
-  //  - R2: SCORE TOP    -> Both motors forward (everything forward)
+  //  - R2: PICKUP BALLS -> Only bottom intake motor forward
+  //  - R1: SCORE TOP    -> Both motors forward (everything forward)
   //  - L1: SCORE BOTTOM -> Both motors reverse (everything reverse)
+  //  - L2: SCORE MIDDLE -> Extend piston + both motors forward
+  //  - No buttons pressed -> Retract piston + stop motors
+
+  
 
   //sets up boolean variables for each button
     bool l1 = Controller.ButtonL1.pressing();
@@ -126,12 +131,12 @@ void usercontrol(void) {
     bool r2 = Controller.ButtonR2.pressing();
 
    
-    if (r1) {
+    if (r2) {
       // PICKUP BALLS ONLY - only bottom intake motor forward
       BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
       TopIntake.stop();
     } 
-    else if (r2) {
+    else if (r1) {
       // SCORE TOP - both motors forward (everything forward)
       BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
       TopIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
@@ -141,8 +146,15 @@ void usercontrol(void) {
       BottomIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
       TopIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
     }
+    else if (l2) {
+      // SCORE MIDDLE - extend piston + both motors forward
+      Middle.set(true);
+      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+    }
     else {
-      // No intake buttons pressed - stop both motors
+      // No buttons pressed - retract piston + stop motors
+      Middle.set(false);
       BottomIntake.stop();
       TopIntake.stop();
     }
