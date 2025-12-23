@@ -76,7 +76,7 @@ void startPickupBalls(int speed) {
 void startScoreTop(int speed) {
     // Score top - bottom reverse, top forward
     BottomIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
-    TopIntake.spin(vex::directionType::fwd, 90, vex::velocityUnits::pct);
+    TopIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
 }
 
 void startScoreBottom(int speed) {

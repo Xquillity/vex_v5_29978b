@@ -8,38 +8,46 @@ using namespace vex;
 
 
 void rightAuton() {
-  // STEP 1-2: Drive forward 24 inches (slow for ball pickup)
- 
+  //----------------- STEP 1: get first 3 balls -----------------//
   extendDescorer();
+
   drivePID(9, 0.155, 0, 0.4);
   turnPID(-35, 0.5, 0, 0.01);
   startPickupBalls(100);
   spinDTPosition(67, 15);
   wait(250, msec);
   stopIntake();
-  drivePID(-3, 0.155, 0, 0.4);
-  turnPID(-85.67, 0.3, 0, 0.01);
-  toggleMatchloader();
-  drivePID(23.467, 0.155, 0, 0.4);
-  turnPID(-46.2, 0.3, 0, 0.01);
+
+  //----------------- STEP 2: prep to move to matchload location -----------------//
+  drivePID(-3, 0.155, 0, 0.4);// backwards
+  turnPID(-85.67, 0.3, 0, 0.01); //turn
+  toggleMatchloader();// matchloader down
+  drivePID(23.467, 0.155, 0, 0.4);// forwards( to be in line with matchloader)
+  turnPID(-46.2, 0.3, 0, 0.01); // turn to face matchloader
   wait(500, msec); // Give time for matchloader to extend
 
- //matchload balls
+  //----------------- STEP 3: Matchload -----------------//
+
   startPickupBalls(100);
-  spinDT(37.41);
+  spinDT(37.41);// forwards into matchloader
   wait(845, msec); // Allow time to pick up balls
   stopDT();
   wait(450, msec);
   stopIntake();
   wait(50, msec);
- /**/
-// STEP 3: score top`
+ 
+//----------------- STEP 4: score top`-----------------//
+
+// move to goal
   startPickupBalls(100);
-  spinDTPosition(85.67, -30);
+  spinDTPosition(100, -30);
   stopIntake();
-  
-  wait(1000, msec);
-  scoreTopForTime(100, 3000);
+  wait(50, msec);
+ 
+  // Score
+  startScoreTop(100);
+  wait(3000, msec); // Adjust time as needed to ensure balls are scored
+  stopIntake();
 
 
 
