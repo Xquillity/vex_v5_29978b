@@ -68,20 +68,20 @@ void turnForTime(double velocity, double time) {
 // ===== RAMP INTAKE FUNCTIONS FOR AUTONOMOUS =====//
 
 void startPickupBalls(int speed) {
-    // Pickup balls only - run only bottom intake motor
-    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    // Pickup balls only - bottom motor reverse, top reverse at low speed (anti jamming)
+    BottomIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
     TopIntake.stop();
 }
 
 void startScoreTop(int speed) {
-    // Score top - run everything forward
-    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
-    TopIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
+    // Score top - bottom reverse, top forward
+    BottomIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    TopIntake.spin(vex::directionType::fwd, 90, vex::velocityUnits::pct);
 }
 
 void startScoreBottom(int speed) {
-    // Score bottom - reverse everything
-    BottomIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
+    // Score bottom - bottom forward, top reverse
+    BottomIntake.spin(vex::directionType::fwd, speed, vex::velocityUnits::pct);
     TopIntake.spin(vex::directionType::rev, speed, vex::velocityUnits::pct);
 }
 

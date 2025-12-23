@@ -15,12 +15,12 @@ vex::controller Controller(vex::controllerType::primary);
 
 
 //----------------- DRIVETRAIN MOTORS ----------------//
-vex::motor LB(vex::PORT1, vex::gearSetting::ratio6_1, true); //Left Back Motor
-vex::motor LF(vex::PORT2, vex::gearSetting::ratio6_1, true); //Left Front Motor
-vex::motor LM(vex::PORT3, vex::gearSetting::ratio6_1, true); //Left Middle Motor
-vex::motor RB(vex::PORT4, vex::gearSetting::ratio6_1, false); //Right Back Motor
-vex::motor RF(vex::PORT5, vex::gearSetting::ratio6_1, false); //Right Front Motor
-vex::motor RM(vex::PORT6, vex::gearSetting::ratio6_1, false); //Right Middle Motor
+vex::motor RB(vex::PORT11, vex::gearSetting::ratio6_1, false); //Right Back Motor
+vex::motor RM(vex::PORT12, vex::gearSetting::ratio6_1, false); //Right Middle Motor
+vex::motor RF(vex::PORT13, vex::gearSetting::ratio6_1, false); //Right Front Motor
+vex::motor LB(vex::PORT14, vex::gearSetting::ratio6_1, true); //Left Back Motor
+vex::motor LM(vex::PORT15, vex::gearSetting::ratio6_1, true); //Left Middle Motor
+vex::motor LF(vex::PORT16, vex::gearSetting::ratio6_1, true); //Left Front Motor
 
 // Motor groups for drivetrain
 vex::motor_group LeftDrive(LF, LM, LB);
@@ -33,9 +33,9 @@ vex::drivetrain Drivetrain(LeftDrive, RightDrive, 320, 280, 300);
 
 
 //----------------- Intake Motors ----------------//
-// Ramp intake motors (2 motors, 11w each)
-vex::motor BottomIntake(vex::PORT7, vex::gearSetting::ratio18_1, false); //Bottom Intake Roller (port 5, 11w)
-vex::motor TopIntake(vex::PORT8, vex::gearSetting::ratio18_1, false); //Top Intake Roller (port 6, 11w)
+// Ramp intake motors (2 motors, both 6:1 ratio)
+vex::motor BottomIntake(vex::PORT7, vex::gearSetting::ratio6_1, false); //Bottom Intake Roller (port 7, 6:1)
+vex::motor TopIntake(vex::PORT8, vex::gearSetting::ratio6_1, false); //Top Intake Roller (port 8, 6:1)
 
 
 

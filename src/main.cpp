@@ -91,20 +91,21 @@ void autonomous(void) {
 
 void usercontrol(void) {
   // Simple button state tracking
-  bool lastButtonX = false;
+  bool lastButtonA = false;
   bool lastButtonY = false;
 
   while (true) {
     
     // ========== DRIVE CONTROL ========== //
     double fwd = Controller.Axis3.position();
-    double turn = Controller.Axis1.position() * 0.67; // Scale down turn to make it more manageable
+    double turn = Controller.Axis1.position() * 0.667; //TURN SPEED HERE
 
     double leftPower  = fwd + turn;
     double rightPower = fwd - turn;
 
-    spinLeftDT(leftPower * 0.9);
-    spinRightDT(rightPower * 0.9);
+  
+    spinLeftDT(leftPower * 0.567);// DRIVE SPEED HERE
+    spinRightDT(rightPower * 0.567);// DRIVE SPEED HERE
     
     // ========== INERTIAL SENSOR CALIBRATION ========== //
     // (Handled in pre_auton; no runtime calibration here.)
@@ -129,28 +130,27 @@ void usercontrol(void) {
     bool l2 = Controller.ButtonL2.pressing();
     bool r1 = Controller.ButtonR1.pressing();
     bool r2 = Controller.ButtonR2.pressing();
-
    
     if (r2) {
-      // PICKUP BALLS ONLY - only bottom intake motor forward
-      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      // PICKUP BALLS ONLY - only bottom intake motor forward, top reverse just to circulate balls (anti jamming)
+      BottomIntake.spin(vex::directionType::rev, 120, vex::velocityUnits::pct);
       TopIntake.stop();
     } 
     else if (r1) {
       // SCORE TOP - both motors forward (everything forward)
-      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-      TopIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-    }
-    else if (l1) {
-      // SCORE BOTTOM - both motors reverse (everything reverse)
-      BottomIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
-      TopIntake.spin(vex::directionType::rev, 60, vex::velocityUnits::pct);
+      BottomIntake.spin(vex::directionType::rev, 100, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::fwd, 90, vex::velocityUnits::pct);
     }
     else if (l2) {
+      // SCORE BOTTOM - both motors reverse (everything reverse)
+      BottomIntake.spin(vex::directionType::fwd, 100, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::rev, 100, vex::velocityUnits::pct);
+    }
+    else if (l1) {
       // SCORE MIDDLE - extend piston + both motors forward
       Middle.set(true);
-      BottomIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
-      TopIntake.spin(vex::directionType::fwd, 60, vex::velocityUnits::pct);
+      BottomIntake.spin(vex::directionType::rev, 100, vex::velocityUnits::pct);
+      TopIntake.spin(vex::directionType::rev, 100, vex::velocityUnits::pct);
     }
     else {
       // No buttons pressed - retract piston + stop motors
@@ -162,12 +162,12 @@ void usercontrol(void) {
    
    
     // ========== MATCHLOADER CONTROL ========== //
-    // X button - single press toggle
-    bool currentButtonX = Controller.ButtonX.pressing();
-    if (currentButtonX && !lastButtonX) {
+    // A button - single press toggle
+    bool currentButtonA = Controller.ButtonA.pressing();
+    if (currentButtonA && !lastButtonA) {
       toggleMatchloader();  // Simple toggle - if extended it retracts, if retracted it extends
     }
-    lastButtonX = currentButtonX;
+    lastButtonA = currentButtonA;
    
     
 

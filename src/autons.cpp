@@ -8,34 +8,48 @@ using namespace vex;
 
 
 void rightAuton() {
-  // STEP 1-2: Drive forward 24 inches
-  drivePID(24, 0.155, 0, 0.4);
+  // STEP 1-2: Drive forward 24 inches (slow for ball pickup)
+ 
+  extendDescorer();
+  drivePID(9, 0.155, 0, 0.4);
+  turnPID(-35, 0.5, 0, 0.01);
+  startPickupBalls(100);
+  spinDTPosition(67, 15);
+  wait(250, msec);
+  stopIntake();
+  drivePID(-3, 0.155, 0, 0.4);
+  turnPID(-85.67, 0.3, 0, 0.01);
+  toggleMatchloader();
+  drivePID(23.467, 0.155, 0, 0.4);
+  turnPID(-46.2, 0.3, 0, 0.01);
+  wait(500, msec); // Give time for matchloader to extend
+
+ //matchload balls
+  startPickupBalls(100);
+  spinDT(37.41);
+  wait(845, msec); // Allow time to pick up balls
+  stopDT();
+  wait(450, msec);
+  stopIntake();
+  wait(50, msec);
+ /**/
+// STEP 3: score top`
+  startPickupBalls(100);
+  spinDTPosition(85.67, -30);
+  stopIntake();
   
-  // STEP 2 PREP: Turn left 45 degrees (diagonal)
-  turnPID(45, 0.5, 0, 0.01);
-  
-  // STEP 2-3: Forward while collecting balls
-  pickupBalls(1500); // Start pickup while driving
-  drivePID(18, 0.155, 0, 0.4); // Drive forward to collection area
-  
-  // STEP 3-4: Backwards 
-  drivePID(-18, 0.155, 0, 0.4);
-  
-  // STEP 4 PREP: Turn right 90 degrees
-  turnPID(-90, 0.5, 0, 0.01);
-  
-  // STEP 4-5: Turn left 45 to align + drive to goal
-  turnPID(45, 0.5, 0, 0.01); // Align scoring end to goal
-  drivePID(24, 0.155, 0, 0.4); // Forward to goal area
-  
-  // STEP 5-6: Turn to position scoring end + drive + score
-  turnPID(90, 0.5, 0, 0.01); // Position scoring end toward goal
-  drivePID(12, 0.155, 0, 0.4); // Forward into scoring position
-  scoreTop(5000, false); // Score first batch for 5 seconds
+  wait(1000, msec);
+  scoreTopForTime(100, 3000);
+
+
+
 }
 
 void leftAuton() {
   // No autonomous - empty function
+
+  
+  
 }
 
 void skillsAuton() {
