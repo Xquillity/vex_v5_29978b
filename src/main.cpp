@@ -95,10 +95,12 @@ void usercontrol(void) {
   bool lastButtonY = false;
 
   while (true) {
+
+
     
     // ========== DRIVE CONTROL ========== //
-    double fwd = Controller.Axis3.position();
-    double turn = Controller.Axis1.position() * 0.667; //TURN SPEED HERE
+    double fwd = Controller.Axis3.position();  // Left joystick Y = forward/back
+    double turn = Controller.Axis1.position() * 0.667; // Left joystick X = turning
 
     double leftPower  = fwd + turn;
     double rightPower = fwd - turn;
@@ -198,6 +200,7 @@ int main() {
 
   while (true) {
     wait(100, msec);
+    
   }
 }
 
