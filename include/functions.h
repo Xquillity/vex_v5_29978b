@@ -8,6 +8,7 @@ void spinDT(double velocity);
 void stopDT();
 void spinRightDT(double velocity);
 void spinLeftDT(double velocity);
+void driveCurve(double leftSpeed, double rightSpeed, int timeMs);
 
 void spinDTPosition(double velocity, double targetInches);
 void turnForTime(double velocity, double time);

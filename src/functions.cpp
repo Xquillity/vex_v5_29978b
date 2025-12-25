@@ -44,6 +44,14 @@ void spinDT(double velocity) {
     spinLeftDT(velocity);
 }
 
+void driveCurve(double leftSpeed, double rightSpeed, int timeMs) {
+    // Drive in a curve by setting different speeds for left and right sides
+    spinLeftDT(leftSpeed);
+    spinRightDT(rightSpeed);
+    wait(timeMs, msec);
+    stopDT();
+}
+
 void spinDTPosition(double Velocity, double targetInches) {
     setDTPosition(0);
     double targetDegrees = inchesToDegrees(targetInches);
